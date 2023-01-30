@@ -11,40 +11,23 @@
 
 
 class Unit:
-    def move(self, field, x_coord, y_coord, direction, is_fly, crawl, speed = 1):
+    def move(self, direction):
+        speed = self._get_speed()
+        if direction == "up":
+            self.field.set_unit(x=self.x, y=self.y + speed, unit=self)
+        if direction == "down":
+            self.field.set_unit(x=self.x, y=self.y - speed, unit=self)
+        if direction == "left":
+            self.field.set_unit(x=self.x - speed, y=self.y, unit=self)
+        if direction == "right":
+            self.field.set_unit(x=self.x + speed, y=self.y, unit=self)
 
-        if is_fly and crawl:
-            raise ValueError('Рожденный ползать летать не должен!')
-
-        if is_fly:
-            speed *= 1.2
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
-        if crawl:
-            speed *= 0.5
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
-
-            field.set_unit(x=new_x, y=new_y, unit=self)
+    def _get_speed(self):
+        if self.status == "fly":
+            return self.speed * 1.2
+        elif self.status == "crawl":
+            return self.speed * 0.5
+        else:
+            raise Exception
 
 #     ...
